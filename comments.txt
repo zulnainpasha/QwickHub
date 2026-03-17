@@ -1,0 +1,15 @@
+create structure(folders and files)
+install all the required packages and modules(in this case mongoose, bcrypt, dotenv, jsonwebtoken, nodemailer, cors, express-validator, helmet, express-rate-limit, node,cron)
+create a .env file and add all the required details (in this case PORT, MONGO_URL, JWT_SECRET, JWT_EXPIRES_IN, EMAIL_USER, EMAIL_PASS)
+connect to the database(/src/config/db) - 1. import mongoose
+                                          2. connect it through mongoose.connect(process.env.MONGO_URL) [use try catch for error handling]
+                                          3. export it (the function)
+set-up server.js (Server.js is used to load env variables, connect to the database, listen to the port) app.js is engine, server.js is keys for the car 
+set-up app.js (App.js- express app), require express, cors, helmet, use the middleware for the same, create a example route(app.get("/", ()=>{res.send("App running)})), then export it cuz server.js needs app.js
+run server.js
+
+create User.model.js in models folder(Basically database schema of user). After creating the schema, hasing and comparing(Middleware)
+    if password is not modified, return. if it is modified -> hash the password by bcrypt.hash(this.password, 12) 12 indicated the rounds of security
+    then for comparing create a function take enteredPassword as a parameter then return/compare it using bcrypt.compare(enteredPassword, this.password)
+create email.service.js under services folder. add the nodemailer code in it
+create seed.js under scripts folder. it is needed to create a admin manually cuz sign-up page is not default
