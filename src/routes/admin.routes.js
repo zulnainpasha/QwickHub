@@ -2,9 +2,11 @@ const router = require("express").Router();
 const crypto = require("crypto");
 const User = require("../models/User.model");
 const { sendEmail } = require("../services/email.service");
+const { protect } = require("../middleware/auth.middleware");
+const { authorize } = require("../middleware/role.middleware");
 
 // POST /api/admin/users  Admin creates a new user
-router.post("/users", async (req, res) => {
+router.post("/users", protect, authorize("admin"), async (req, res) => {
   try {
     const { name, email, role } = req.body;
 
@@ -42,7 +44,7 @@ router.post("/users", async (req, res) => {
 
     await sendEmail({
       to: email,
-      subject: "You are invited to Product Manager App",
+      subject: "You are invited to QwickHub",
       html: `
         <h2>Hi ${name},</h2>
         <p>You have been added as a <strong>${role}</strong>.</p>

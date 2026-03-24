@@ -16,9 +16,9 @@ const seedAdmin = async () => {
 
     // Create the admin
     const admin = new User({
-      name: "Super Admin",
-      email: "admin@gmail.com",
-      password: "admin123456",
+      name: process.env.SEED_ADMIN_NAME,
+      email: process.env.SEED_ADMIN_EMAIL,
+      password: process.env.SEED_ADMIN_PASSWORD,
       role: "admin",
       isVerified: true,
       isPasswordSet: true,
@@ -27,8 +27,8 @@ const seedAdmin = async () => {
     await admin.save();
 
     console.log("Admin created successfully!");
-    console.log("Email: admin@gmail.com");
-    console.log("Password: admin123456");
+    console.log(`Email: ${process.env.SEED_ADMIN_EMAIL}`);
+    console.log(`Password: ${process.env.SEED_ADMIN_PASSWORD}`);
     process.exit(0);
   } catch (error) {
     console.error("Seed failed:", error.message);
