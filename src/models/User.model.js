@@ -23,6 +23,19 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "manager", "developer", "viewer"],
       required: true,
     },
+    specialization: {
+      type: String,
+      enum: [
+        "frontend",
+        "backend",
+        "design",
+        "testing",
+        "deployment",
+        "fullstack",
+        "other",
+      ],
+      default: null,
+    },
     isVerified: {
       type: Boolean,
       default: false,

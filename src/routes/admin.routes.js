@@ -8,7 +8,7 @@ const { authorize } = require("../middleware/role.middleware");
 // POST /api/admin/users  Admin creates a new user
 router.post("/users", protect, authorize("admin"), async (req, res) => {
   try {
-    const { name, email, role } = req.body;
+    const { name, email, role, specialization } = req.body;
 
     // Check if email already exists
     const existing = await User.findOne({ email });
@@ -31,6 +31,7 @@ router.post("/users", protect, authorize("admin"), async (req, res) => {
       name,
       email,
       role,
+      specialization: specialization || null,
       isVerified: false,
       isPasswordSet: false,
       inviteToken: hashedToken,

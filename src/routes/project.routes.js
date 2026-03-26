@@ -231,7 +231,7 @@ router.get("/:id/summary", protect, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id)
       .populate("createdBy", "name email")
-      .populate("members", "name email role");
+      .populate("members", "name email role specialization");
 
     if (!project) {
       return res.status(404).json({
@@ -259,6 +259,18 @@ router.get("/:id/summary", protect, async (req, res) => {
       (new Date(project.deadline) - today) / (1000 * 60 * 60 * 24),
     );
 
+    // Tracking status — will improve after Task model is ready
+    let trackingStatus;
+    if (project.status === "completed" || project.progress === 100) {
+      trackingStatus = "completed";
+    } else if (project.status === "on-hold") {
+      trackingStatus = "on-hold";
+    } else if (daysLeft < 0) {
+      trackingStatus = "at-risk"; // deadline passed = at risk
+    } else {
+      trackingStatus = "on-track";
+    }
+
     res.status(200).json({
       success: true,
       data: {
@@ -268,12 +280,13 @@ router.get("/:id/summary", protect, async (req, res) => {
         startDate: project.startDate,
         deadline: project.deadline,
         status: project.status,
+        trackingStatus, // ← on-track / at-risk / completed / on-hold
         priority: project.priority,
         progress: project.progress,
         daysLeft: daysLeft > 0 ? daysLeft : 0,
         isOverdue: daysLeft < 0,
         createdBy: project.createdBy,
-        members: project.members,
+        members: project.members, // ← now includes specialization
         totalMembers: project.members.length,
       },
     });
@@ -281,5 +294,4 @@ router.get("/:id/summary", protect, async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
-
 module.exports = router;
